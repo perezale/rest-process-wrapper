@@ -4,6 +4,9 @@
     "module": "commonjs",
     "lib": ["es2017"],
     "declaration": true,
-		"strict": true,
-  }
+    "strict": true,
+    "outDir": "dist/"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

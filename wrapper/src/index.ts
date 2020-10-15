@@ -1,5 +1,5 @@
 
-import ProcessManager from "./src/processManager";
+import ProcessManager from "./ProcessManager";
 import http = require('http');
 
 const pm = new ProcessManager();
