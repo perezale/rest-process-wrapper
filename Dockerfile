@@ -5,18 +5,17 @@ FROM ubuntu:20.04
 
 RUN apt-get update && \
 	apt-get install -y build-essential 
-# git cmake autoconf libtool pkg-config
 
 
 # C++ App
 
-RUN mkdir -p /opt/HelloWorld
+RUN mkdir -p /app/
 
-WORKDIR /HelloWorld
+WORKDIR /app/
 
-COPY helloworld.cpp /HelloWorld
+COPY src ./
 
-RUN g++ -o HelloWorld helloworld.cpp
+RUN g++ -o dummy-app main.cpp
 
 # Node Setup
 
@@ -36,20 +35,24 @@ RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
 
 ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
-
+RUN npm install -g typescript
 
 # Node App
 
-RUN mkdir -p /home/node/app/node_modules
+RUN mkdir -p /app/wrapper
 
-WORKDIR /home/node/app
+WORKDIR /app/wrapper
 
-COPY package*.json ./
+COPY wrapper/package*.json ./
 
-#RUN npm install
+RUN npm install 
 
-COPY . .
+COPY wrapper .
+
+RUN npm run build
 
 EXPOSE 3000
+
+ENV BINARY_PATH=/app/dummy-app
 
 CMD [ "npm", "start" ]
